@@ -6,6 +6,8 @@ FONT_GREEN="\033[32m"
 FONT_YELLOW="\033[33m"
 FONT_BLUE="\033[34m"
 
+SYSTEM_APPLICATIONS_FOLDER="/Applications"
+
 CURRENT_FOLDER=`pwd`
 
 THINGS_FOLDER="$CURRENT_FOLDER/things"
@@ -92,12 +94,12 @@ function doInstallSkinChar() {
 }
 
 function doInstall() {
-	cp "$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE" /Applications
+	cp "$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE" "$SYSTEM_APPLICATIONS_FOLDER"
 	showMainMenu "${FONT_BLUE}Instalação concluída com sucesso!${FONT_DEFAULT}";
 }
 
 function doUninstall() {
-	rm -R "Application/$MINECRAFT_FORGE_INSTALLER_FILE"
+	rm -R "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE"
 	showMainMenu "${FONT_RED}Desinstalação concluída com sucesso!${FONT_DEFAULT}";
 }
 
