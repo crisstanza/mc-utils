@@ -55,26 +55,9 @@ function doSetup() {
 			rm -R "$TMP_FOLDER"
 		fi
 		mkdir "$TMP_FOLDER"
-		#
 		if [ ! -d "$BKP_FOLDER" ] ; then
 			mkdir "$BKP_FOLDER"
 		fi
-		#
-		#if [ ! -d "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
-		#	doQuit "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
-		#fi
-		#
-		if [ ! -d "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" ] ; then
-			doQuit "${FONT_RED}Arquivo '$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
-		fi
-		#
-		#if [ ! -d "$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE" ] ; then
-		#	doQuit "${FONT_RED}Arquivo '$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
-		#fi
-		#
-		#if [ ! -d "$SKINS_FOLDER/$SKIN_CHAR_FILE" ] ; then
-		#	doQuit "${FONT_RED}Arquivo '$SKINS_FOLDER/$SKIN_CHAR_FILE' não encontrado!${FONT_DEFAULT}"
-		#fi
 	else
 		doQuit "${FONT_RED}Diretório '$THINGS_FOLDER' não encontrado!${FONT_DEFAULT}"
 	fi
@@ -92,60 +75,96 @@ function doQuit() {
 }
 
 function doBackup() {
-	cp "$MAIN_FILE_FOLDER/$MAIN_FILE" "$BKP_FOLDER"
-	showMainMenu "${FONT_BLUE}Back-up efetuado com sucesso!${FONT_DEFAULT}"
+	if [ -f "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
+		cp "$MAIN_FILE_FOLDER/$MAIN_FILE" "$BKP_FOLDER"
+		showMainMenu "${FONT_BLUE}Back-up efetuado com sucesso!${FONT_DEFAULT}"
+	else
+		showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
+	fi
 }
 
 function doBackupRestore() {
-	cp "$BKP_FOLDER/$MAIN_FILE" "$MAIN_FILE_FOLDER"
-	showMainMenu "${FONT_BLUE}Back-up restaurado com sucesso!${FONT_DEFAULT}"
+	if [ -f "$BKP_FOLDER/$MAIN_FILE" ] ; then
+		cp "$BKP_FOLDER/$MAIN_FILE" "$MAIN_FILE_FOLDER"
+		showMainMenu "${FONT_BLUE}Back-up restaurado com sucesso!${FONT_DEFAULT}"
+	else
+		showMainMenu "${FONT_RED}Arquivo '$BKP_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
+	fi
 }
 
 function doInstallMinecraftForge() {
-	unzip -x "$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE" -d "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
-	cd "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
-	zip -r "$MAIN_FILE_FOLDER/$MAIN_FILE" *
-	zip -d "$MAIN_FILE_FOLDER/$MAIN_FILE" META-INF\*
-	if [ "$AUTO_CLEAN_UP" == 1 ] ; then
-		rm -R "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
+	if [ -f "$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE" ] ; then
+		if [ -f "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
+			unzip -x "$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE" -d "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
+			cd "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
+			zip -r "$MAIN_FILE_FOLDER/$MAIN_FILE" *
+			zip -d "$MAIN_FILE_FOLDER/$MAIN_FILE" META-INF\*
+			if [ "$AUTO_CLEAN_UP" == 1 ] ; then
+				rm -R "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
+			fi
+			showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
+		else
+			showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
+		fi
+	else
+		showMainMenu "${FONT_RED}Arquivo '$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
 	fi
-	showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
 }
 
 function doInstallPixelmon() {
-	unzip -x "$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE" -d "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
-	cd "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
-	cp -Rf database "$MAIN_FILE_FOLDER_ROOT"
-	cp -Rf mods "$MAIN_FILE_FOLDER_ROOT"
-	if [ "$AUTO_CLEAN_UP" == 1 ] ; then
-		rm -R "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
+	if [ -f "$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE" ] ; then
+		if [ -d "$MAIN_FILE_FOLDER_ROOT" ] ; then
+			unzip -x "$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE" -d "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
+			cd "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
+			cp -Rf database "$MAIN_FILE_FOLDER_ROOT"
+			cp -Rf mods "$MAIN_FILE_FOLDER_ROOT"
+			if [ "$AUTO_CLEAN_UP" == 1 ] ; then
+				rm -R "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
+			fi
+			showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
+		else
+			showMainMenu "${FONT_RED}Pasta '$MAIN_FILE_FOLDER_ROOT' não encontrada!${FONT_DEFAULT}"
+		fi
+	else
+		showMainMenu "${FONT_RED}Arquivo '$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
 	fi
-	showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
 }
 
 function doInstallSkinChar() {
-	local type="$1";
-	if [ "$type" == "1" ] ; then cd "$SKIN_CHAR_MARIO_FOLDER"
-	elif [ "$type" == "2" ] ; then cd "$SKIN_CHAR_RAPHAEL_FOLDER"
-	elif [ "$type" == "3" ] ; then cd "$SKIN_CHAR_ZOMBIE_FOLDER"
-	elif [ "$type" == "4" ] ; then cd "$SKIN_CHAR_HEMAN_FOLDER"
+	if [ -f "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
+		local type="$1";
+		if [ "$type" == "1" ] ; then cd "$SKIN_CHAR_MARIO_FOLDER"
+		elif [ "$type" == "2" ] ; then cd "$SKIN_CHAR_RAPHAEL_FOLDER"
+		elif [ "$type" == "3" ] ; then cd "$SKIN_CHAR_ZOMBIE_FOLDER"
+		elif [ "$type" == "4" ] ; then cd "$SKIN_CHAR_HEMAN_FOLDER"
+		else
+			showMainMenu "${FONT_RED}Opção inválida.${FONT_DEFAULT}"
+			return
+		fi
+		zip -r "$MAIN_FILE_FOLDER/$MAIN_FILE" "$SKIN_CHAR_FILE"
+		showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
 	else
-		showMainMenu "${FONT_RED}Opção inválida.${FONT_DEFAULT}"
-		return
+		showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
 	fi
-	zip -r "$MAIN_FILE_FOLDER/$MAIN_FILE" "$SKIN_CHAR_FILE"
-	showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
 }
 
 function doUninstallSkinChar() {
-	cd "$SKIN_CHAR_ORIG_FOLDER"
-	zip -r "$MAIN_FILE_FOLDER/$MAIN_FILE" "$SKIN_CHAR_FILE"
-	showMainMenu "${FONT_BLUE}Desinstalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
+	if [ -f "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
+		cd "$SKIN_CHAR_ORIG_FOLDER"
+		zip -r "$MAIN_FILE_FOLDER/$MAIN_FILE" "$SKIN_CHAR_FILE"
+		showMainMenu "${FONT_BLUE}Desinstalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
+	else
+		showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
+	fi
 }
 
 function doInstall() {
-	cp -R "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE"
-	showMainMenu "${FONT_BLUE}Instalação concluída com sucesso!${FONT_DEFAULT}"
+	if [ -d "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" ] ; then
+		cp -R "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE"
+		showMainMenu "${FONT_BLUE}Instalação concluída com sucesso!${FONT_DEFAULT}"
+	else
+		showMainMenu "${FONT_RED}Arquivo '$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
+	fi
 }
 
 function doUninstall() {
@@ -194,7 +213,7 @@ function showMainMenu() {
 		echo
 		echo $msg;
 	fi
-	#
+
 	echo
 	echo "${FONT_GREEN}O que você deseja?${FONT_DEFAULT}"
 	echo
@@ -218,9 +237,9 @@ function showMainMenu() {
 	echo "${FONT_YELLOW}S)${FONT_DEFAULT} Sair";
 	echo
 	echo ":\c";
-	#
+
 	read option
-	#
+
 	if [ "$option" == "1" ] ; then doInstall;
 	elif [ "$option" == "2" ] ; then doUninstall;
 	elif [ "$option" == "3" ] ; then doCleanUpPersonalFolder;
@@ -238,7 +257,9 @@ function showMainMenu() {
 
 	elif [ "$option" == "R" -o "$option" == "r" ] ; then doStartGame;
 	elif [ "$option" == "E" -o "$option" == "e" ] ; then doQuitGame;
+
 	elif [ "$option" == "S" -o "$option" == "s" ] ; then doQuit;
+
 	else
 		showMainMenu "${FONT_RED}Digite uma das opções válidas!${FONT_DEFAULT}"
 	fi
