@@ -8,10 +8,12 @@ FONT_GREEN="\033[32m"
 FONT_YELLOW="\033[33m"
 FONT_BLUE="\033[34m"
 
-AUTO_CLEAN_UP=1
-
-if [ "$1" == "debug" ]; then CLEAR_SCREEN=0
-else CLEAR_SCREEN=1
+if [ "$1" == "debug" ]; then
+	CLEAR_SCREEN=0
+	AUTO_CLEAN_UP=0
+else
+	CLEAR_SCREEN=1
+	AUTO_CLEAN_UP=1
 fi
 
 SYSTEM_APPLICATIONS_FOLDER="/Applications"
