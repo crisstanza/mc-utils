@@ -1,0 +1,65 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = MyOpenGLView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
+        {
+            ACTIONS = {
+                cancelCores = id; 
+                cancelPrefs = id; 
+                cancelSounds = id; 
+                closeFromMenu = id; 
+                defaultCores = id; 
+                defaultPrefs = id; 
+                defaultSounds = id; 
+                emucores = id; 
+                enableAudio = id; 
+                limitSpeed = id; 
+                makeFullscreen = id; 
+                okCores = id; 
+                okPrefs = id; 
+                okSounds = id; 
+                openFromMenu = id; 
+                openPrefs = id; 
+                openSoundWin = id; 
+                quit = id; 
+                showSpeed = id; 
+                sliderAction = id; 
+            }; 
+            CLASS = SDLMain; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                EnableAudio = id; 
+                LimitSpeed = id; 
+                ShowSpeed = id; 
+                bilinearSwitch = id; 
+                corecheckBox = id; 
+                coresWin = id; 
+                filterSwitch = id; 
+                fogSwitch = id; 
+                fullscreenSwitch = id; 
+                hbuftext = id; 
+                hslider = id; 
+                lbuftext = id; 
+                lslider = id; 
+                pbuftext = id; 
+                prefsWindow = id; 
+                pslider = id; 
+                resolutionSwitch = id; 
+                sbuftext = id; 
+                soundVer = id; 
+                soundWin = id; 
+                sslider = id; 
+                swapAudio = id; 
+                textureCache = id; 
+                versionText = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

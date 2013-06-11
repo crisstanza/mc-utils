@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleName</key>
+	<string>MinecraftSP</string>
+	<key>CFBundleVersion</key>
+	<string>12.1</string>
+	<key>CFBundleShortVersionString</key>
+	<string>MinecraftSP 12.1</string>
+	<key>CFBundleExecutable</key>
+	<string>JavaApplicationStub</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleGetInfoString</key>
+	<string>AnjoCaido 2010</string>
+	<key>CFBundleIconFile</key>
+	<string>favicon.icns</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.Mojang Specifications.Minecraft.MinecraftSP</string>
+	<key>LSHasLocalizedDisplayName</key>
+	<true/>
+	<key>CFBundleDisplayName</key>
+	<string>MinecraftSP</string>
+	<key>Java</key>
+	<dict>
+		<key>MainClass</key>
+		<string>net.minecraft.LauncherFrame</string>
+		<key>ClassPath</key>
+		<string>$APP_PACKAGE/Contents/Resources/Java/MinecraftSP.jar:</string>
+		<key>Properties</key>
+		<dict>
+			<key>sun.java2d.noddraw</key>
+			<string>true</string>
+			<key>sun.java2d.d3d</key>
+			<string>false</string>
+			<key>sun.java2d.opengl</key>
+			<string>false</string>
+			<key>sun.java2d.pmoffscreen</key>
+			<string>false</string>
+		</dict>
+		<key>VMOptions</key>
+		<string>-Xms512M -Xmx1024M</string>
+		<key>JVMVersion</key>
+		<string>1.5+</string>
+		<key>JVMArchs</key>
+		<array>
+			<string>i386</string>
+			<string>ppc</string>
+		</array>
+	</dict>
+</dict>
+</plist>
