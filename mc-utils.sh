@@ -267,7 +267,7 @@ function showMainMenu() {
 	fi
 
 	echo
-	echo "${FONT_GREEN}O que você deseja?${FONT_DEFAULT}"
+	echo "${FONT_YELLOW}O que você deseja?${FONT_DEFAULT}"
 	echo
 	echo "   ${FONT_GREEN}1)${FONT_DEFAULT} Instalar Minecraft          ${FONT_GREEN}2)${FONT_DEFAULT} Desinstalar Minecraft   ${FONT_GREEN}3)${FONT_DEFAULT} Apagar pasta pessoal";
 	echo "   ${FONT_GREEN}4)${FONT_DEFAULT} Fazer back-up               ${FONT_GREEN}5)${FONT_DEFAULT} Restaurar back-up       ${FONT_GREEN}6)${FONT_DEFAULT} Desinstalar todas as alterações";
