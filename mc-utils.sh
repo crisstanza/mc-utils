@@ -213,6 +213,8 @@ function doUninstallSkinChar() {
 function doInstall() {
 	if [ -d "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" ] ; then
 		cp -R "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE"
+		defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE/</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>";
+		killall -HUP Dock
 		showMainMenu "${FONT_BLUE}Instalação concluída com sucesso!${FONT_DEFAULT}"
 	else
 		showMainMenu "${FONT_RED}Arquivo '$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
