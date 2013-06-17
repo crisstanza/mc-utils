@@ -105,10 +105,10 @@ function doUninstallAllMods() {
 	if [ -f "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
 		if [ -f "$MAIN_FILE_ORIG_FOLDER/$MAIN_FILE" ] ; then
 			cp "$MAIN_FILE_ORIG_FOLDER/$MAIN_FILE" "$MAIN_FILE_FOLDER"
-			if [ -f "$MAIN_FILE_FOLDER_ROOT/database" ] ; then
+			if [ -d "$MAIN_FILE_FOLDER_ROOT/database" ] ; then
 				rm -R "$MAIN_FILE_FOLDER_ROOT/database"
 			fi
-			if [ -f "$MAIN_FILE_FOLDER_ROOT/mods" ] ; then
+			if [ -d "$MAIN_FILE_FOLDER_ROOT/mods" ] ; then
 				rm -R "$MAIN_FILE_FOLDER_ROOT/mods"
 			fi
 			showMainMenu "${FONT_BLUE}Modificações desinstaladas com sucesso!${FONT_DEFAULT}"
@@ -300,19 +300,19 @@ function showMainMenu() {
 	elif [ "$option" == "3" ] ; then doCleanUpPersonalFolder;
 	elif [ "$option" == "4" ] ; then doBackup;
 	elif [ "$option" == "5" ] ; then doBackupRestore;
-	elif [ "$option" == "5" ] ; then doUninstallAllMods;
+	elif [ "$option" == "6" ] ; then doUninstallAllMods;
 
-	elif [ "$option" == "6" ] ; then doInstallMinecraftForge;
-	elif [ "$option" == "7" ] ; then doInstallModLoader;
+	elif [ "$option" == "7" ] ; then doInstallMinecraftForge;
+	elif [ "$option" == "8" ] ; then doInstallModLoader;
 
-	elif [ "$option" == "8" ] ; then doInstallPixelmon;
-	elif [ "$option" == "9" ] ; then doInstallReisMinimap;
+	elif [ "$option" == "9" ] ; then doInstallPixelmon;
+	elif [ "$option" == "10" ] ; then doInstallReisMinimap;
 
-	elif [ "$option" == "10" ] ; then doInstallSkinChar 1;
-	elif [ "$option" == "11" ] ; then doInstallSkinChar 2;
-	elif [ "$option" == "12" ] ; then doInstallSkinChar 3;
-	elif [ "$option" == "13" ] ; then doInstallSkinChar 4;
-	elif [ "$option" == "14" ] ; then doUninstallSkinChar;
+	elif [ "$option" == "11" ] ; then doInstallSkinChar 1;
+	elif [ "$option" == "12" ] ; then doInstallSkinChar 2;
+	elif [ "$option" == "13" ] ; then doInstallSkinChar 3;
+	elif [ "$option" == "14" ] ; then doInstallSkinChar 4;
+	elif [ "$option" == "15" ] ; then doUninstallSkinChar;
 
 	elif [ "$option" == "R" -o "$option" == "r" ] ; then doStartGame;
 	elif [ "$option" == "E" -o "$option" == "e" ] ; then doQuitGame;
