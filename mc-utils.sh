@@ -16,6 +16,10 @@ elif [ "$1" == "user-mode" ]; then
 	CLEAR_SCREEN=1
 	AUTO_CLEAN_UP=1
 	USER_MODE=1
+else
+	CLEAR_SCREEN=1
+	AUTO_CLEAN_UP=1
+	USER_MODE=0
 fi
 
 SYSTEM_APPLICATIONS_FOLDER="/Applications"
@@ -224,6 +228,7 @@ function doInstall() {
 function doUninstall() {
 	if [ -d "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE" ] ; then
 		rm -R "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE"
+		killall -HUP Dock
 		showMainMenu "${FONT_BLUE}Desinstalação concluída com sucesso!${FONT_DEFAULT}"
 	else
 		showMainMenu "${FONT_RED}Arquivo '$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
