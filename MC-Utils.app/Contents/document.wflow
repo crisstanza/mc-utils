@@ -59,8 +59,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>COMMAND_STRING</key>
-					<string>#open /Applications/Utilities/Terminal.app
-osascript -e 'tell application "Terminal" to close every window'
+					<string>osascript -e 'tell application "Terminal" to close every window'
 osascript -e '
 	tell application "Terminal"
 		activate
