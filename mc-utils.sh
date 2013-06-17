@@ -216,10 +216,14 @@ function doUninstallSkinChar() {
 
 function doInstall() {
 	if [ -d "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" ] ; then
-		cp -R "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE"
-		defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE/</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>";
-		killall -HUP Dock
-		showMainMenu "${FONT_BLUE}Instalação concluída com sucesso!${FONT_DEFAULT}"
+		if [ -d "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE" ] ; then
+			showMainMenu "${FONT_RED}Minecraft já está instalado!${FONT_DEFAULT}"
+		else
+			cp -R "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE"
+			defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE/</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>";
+			killall -HUP Dock
+			showMainMenu "${FONT_BLUE}Instalação concluída com sucesso!${FONT_DEFAULT}"
+		fi
 	else
 		showMainMenu "${FONT_RED}Arquivo '$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
 	fi
@@ -228,6 +232,11 @@ function doInstall() {
 function doUninstall() {
 	if [ -d "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE" ] ; then
 		rm -R "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE"
+		local positionInDock=`defaults read com.apple.dock persistent-apps | grep _CFURLString\" | awk -v app="$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE/" '{ if (index($0, app) > 0) { print NR } }'`
+		if [ "$positionInDock" != "" ] ; then
+			positionInDock=$(( positionInDock - 1 ))
+			/usr/libexec/PlistBuddy -c "Delete persistent-apps:$positionInDock" ~/Library/Preferences/com.apple.dock.plist
+		fi
 		killall -HUP Dock
 		showMainMenu "${FONT_BLUE}Desinstalação concluída com sucesso!${FONT_DEFAULT}"
 	else
