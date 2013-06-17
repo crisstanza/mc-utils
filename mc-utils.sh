@@ -24,21 +24,30 @@ THINGS_FOLDER="$CURRENT_FOLDER/things"
 TMP_FOLDER="$THINGS_FOLDER/tmp"
 BKP_FOLDER="$THINGS_FOLDER/bkp"
 
-MAIN_FILE_FOLDER_ROOT="/Users/crisstanza/Library/Application Support/minecraft"
-MAIN_FILE_FOLDER="$MAIN_FILE_FOLDER_ROOT/bin"
-MAIN_FILE="minecraft.jar"
-
 MINECRAFT_INSTALLER_FOLDER="$THINGS_FOLDER/Minecraft"
 MINECRAFT_INSTALLER_FILE="Minecraft-1.5.2.app"
 MINECRAFT_INSTALLER_FILE_TRICK="Minecraft-1.5.2.ap[p]"
+
+MAIN_FILE_FOLDER_ROOT="/Users/$USER/Library/Application Support/minecraft"
+MAIN_FILE_FOLDER="$MAIN_FILE_FOLDER_ROOT/bin"
+MAIN_FILE_ORIG_FOLDER="$MINECRAFT_INSTALLER_FOLDER"
+MAIN_FILE="minecraft.jar"
 
 MINECRAFT_FORGE_INSTALLER_FOLDER="$THINGS_FOLDER/Minecraft-Forge"
 MINECRAFT_FORGE_INSTALLER_FILE_NAME="minecraftforge-universal-1.5.2-7.8.0.688"
 MINECRAFT_FORGE_INSTALLER_FILE="$MINECRAFT_FORGE_INSTALLER_FILE_NAME.zip"
 
+MODLOADER_INSTALLER_FOLDER="$THINGS_FOLDER/ModLoader"
+MODLOADER_INSTALLER_FILE_NAME="ModLoader-1.5.2"
+MODLOADER_INSTALLER_FILE="$MODLOADER_INSTALLER_FILE_NAME.zip"
+
 PIXELMON_INSTALLER_FOLDER="$THINGS_FOLDER/Pixelmon"
 PIXELMON_INSTALLER_FILE_NAME="Pixelmon-2.2.1-Install"
 PIXELMON_INSTALLER_FILE="$PIXELMON_INSTALLER_FILE_NAME.zip"
+
+REIS_MINIMAP_INSTALLER_FOLDER="$THINGS_FOLDER/Reis-Minimap"
+REIS_MINIMAP_INSTALLER_FILE_NAME="Reis-Minimap-Mod-1.5.2"
+REIS_MINIMAP_INSTALLER_FILE="$REIS_MINIMAP_INSTALLER_FILE_NAME.zip"
 
 SKINS_FOLDER="$THINGS_FOLDER/Skins"
 SKIN_CHAR_FILE="mob/char.png"
@@ -92,42 +101,80 @@ function doBackupRestore() {
 	fi
 }
 
-function doInstallMinecraftForge() {
-	if [ -f "$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE" ] ; then
+function doUninstallAllMods() {
+	if [ -f "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
+		if [ -f "$MAIN_FILE_ORIG_FOLDER/$MAIN_FILE" ] ; then
+			cp "$MAIN_FILE_ORIG_FOLDER/$MAIN_FILE" "$MAIN_FILE_FOLDER"
+			if [ -f "$MAIN_FILE_FOLDER_ROOT/database" ] ; then
+				rm -R "$MAIN_FILE_FOLDER_ROOT/database"
+			fi
+			if [ -f "$MAIN_FILE_FOLDER_ROOT/mods" ] ; then
+				rm -R "$MAIN_FILE_FOLDER_ROOT/mods"
+			fi
+			showMainMenu "${FONT_BLUE}Modificações desinstaladas com sucesso!${FONT_DEFAULT}"
+		else
+			showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_ORIG_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
+		fi
+	else
+		showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
+	fi
+}
+
+function doInstallZipIntoJar() {
+	local folder="$1"
+	local fileName="$2"
+	local file="$3"
+	if [ -f "$folder/$file" ] ; then
 		if [ -f "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
-			unzip -x "$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE" -d "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
-			cd "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
+			unzip -x "$folder/$file" -d "$TMP_FOLDER/$fileName.unzip"
+			cd "$TMP_FOLDER/$fileName.unzip"
 			zip -r "$MAIN_FILE_FOLDER/$MAIN_FILE" *
 			zip -d "$MAIN_FILE_FOLDER/$MAIN_FILE" META-INF\*
 			if [ "$AUTO_CLEAN_UP" == 1 ] ; then
-				rm -R "$TMP_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE_NAME.unzip"
+				rm -R "$TMP_FOLDER/$fileName.unzip"
 			fi
 			showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
 		else
 			showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
 		fi
 	else
-		showMainMenu "${FONT_RED}Arquivo '$MINECRAFT_FORGE_INSTALLER_FOLDER/$MINECRAFT_FORGE_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
+		showMainMenu "${FONT_RED}Arquivo '$folder/$file' não encontrado!${FONT_DEFAULT}"
 	fi
 }
 
+function doInstallMinecraftForge() {
+	doInstallZipIntoJar $MINECRAFT_FORGE_INSTALLER_FOLDER $MINECRAFT_FORGE_INSTALLER_FILE_NAME $MINECRAFT_FORGE_INSTALLER_FILE
+}
+
+function doInstallModLoader() {
+	doInstallZipIntoJar $MODLOADER_INSTALLER_FOLDER $MODLOADER_INSTALLER_FILE_NAME $MODLOADER_INSTALLER_FILE
+}
+
 function doInstallPixelmon() {
-	if [ -f "$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE" ] ; then
-		if [ -d "$MAIN_FILE_FOLDER_ROOT" ] ; then
-			unzip -x "$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE" -d "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
-			cd "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
-			cp -Rf database "$MAIN_FILE_FOLDER_ROOT"
-			cp -Rf mods "$MAIN_FILE_FOLDER_ROOT"
-			if [ "$AUTO_CLEAN_UP" == 1 ] ; then
-				rm -R "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
+	if [ -f "$MAIN_FILE_FOLDER/$MAIN_FILE" ] ; then
+		if [ -f "$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE" ] ; then
+			if [ -d "$MAIN_FILE_FOLDER_ROOT" ] ; then
+				unzip -x "$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE" -d "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
+				cd "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
+				cp -Rf database "$MAIN_FILE_FOLDER_ROOT"
+				cp -Rf mods "$MAIN_FILE_FOLDER_ROOT"
+				if [ "$AUTO_CLEAN_UP" == 1 ] ; then
+					rm -R "$TMP_FOLDER/$PIXELMON_INSTALLER_FILE_NAME.unzip"
+				fi
+				showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
+			else
+				showMainMenu "${FONT_RED}Pasta '$MAIN_FILE_FOLDER_ROOT' não encontrada!${FONT_DEFAULT}"
 			fi
-			showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
 		else
-			showMainMenu "${FONT_RED}Pasta '$MAIN_FILE_FOLDER_ROOT' não encontrada!${FONT_DEFAULT}"
+			showMainMenu "${FONT_RED}Arquivo '$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
 		fi
 	else
-		showMainMenu "${FONT_RED}Arquivo '$PIXELMON_INSTALLER_FOLDER/$PIXELMON_INSTALLER_FILE' não encontrado!${FONT_DEFAULT}"
+		showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
 	fi
+}
+
+function doInstallReisMinimap() {
+	doInstallZipIntoJar $REIS_MINIMAP_INSTALLER_FOLDER $REIS_MINIMAP_INSTALLER_FILE_NAME $REIS_MINIMAP_INSTALLER_FILE
 }
 
 function doInstallSkinChar() {
@@ -195,13 +242,18 @@ function doStartGame() {
 }
 
 function doQuitGame() {
-	local pid=`ps -A | grep -m1 $SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE_TRICK | awk '{print $1}'`
+	local pid=`ps -A | grep -m1 "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE_TRICK" | awk '{print $1}'`
 	if [ "$pid" == "" ] ; then
 		showMainMenu "${FONT_RED}O jogo não está rodando!${FONT_DEFAULT}"
 	else
 		kill "$pid"
 		showMainMenu "${FONT_BLUE}Jogo encerrado com sucesso!${FONT_DEFAULT}"
 	fi
+}
+
+function doClearScreen() {
+	clear
+	showMainMenu
 }
 
 function showMainMenu() {
@@ -218,21 +270,24 @@ function showMainMenu() {
 	echo "${FONT_GREEN}O que você deseja?${FONT_DEFAULT}"
 	echo
 	echo "   ${FONT_GREEN}1)${FONT_DEFAULT} Instalar Minecraft          ${FONT_GREEN}2)${FONT_DEFAULT} Desinstalar Minecraft   ${FONT_GREEN}3)${FONT_DEFAULT} Apagar pasta pessoal";
-	echo "   ${FONT_GREEN}4)${FONT_DEFAULT} Fazer back-up               ${FONT_GREEN}5)${FONT_DEFAULT} Restaurar back-up";
+	echo "   ${FONT_GREEN}4)${FONT_DEFAULT} Fazer back-up               ${FONT_GREEN}5)${FONT_DEFAULT} Restaurar back-up       ${FONT_GREEN}6)${FONT_DEFAULT} Desinstalar todas as alterações";
+	echo
+	echo "${FONT_GREEN}Mod Loaders:${FONT_DEFAULT}"
+	echo
+	echo "   ${FONT_GREEN}7)${FONT_DEFAULT} Instalar Minecraft Forge    ${FONT_GREEN}8)${FONT_DEFAULT} Instalar ModLoader";
 	echo
 	echo "${FONT_GREEN}Mods:${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_GREEN}6)${FONT_DEFAULT} Instalar Minecraft Forge    ${FONT_GREEN}7)${FONT_DEFAULT} Instalar Pixelmon";
+	echo "   ${FONT_GREEN}9)${FONT_DEFAULT} Instalar Pixelmon          ${FONT_GREEN}10)${FONT_DEFAULT} Instalar Rei's Minimap";
 	echo
 	echo "${FONT_GREEN}Skins - Personagem:${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_GREEN}8)${FONT_DEFAULT} Instalar Mário              ${FONT_GREEN}9)${FONT_DEFAULT} Instalar Raphael";
-	echo "  ${FONT_GREEN}10)${FONT_DEFAULT} Instalar Zumbi             ${FONT_GREEN}11)${FONT_DEFAULT} Instalar He-Man";
-	echo "  ${FONT_GREEN}12)${FONT_DEFAULT} Original";
+	echo "  ${FONT_GREEN}11)${FONT_DEFAULT} Instalar Mário             ${FONT_GREEN}12)${FONT_DEFAULT} Instalar Raphael";
+	echo "  ${FONT_GREEN}13)${FONT_DEFAULT} Instalar Zumbi             ${FONT_GREEN}14)${FONT_DEFAULT} Instalar He-Man        ${FONT_GREEN}15)${FONT_DEFAULT} Original";
 	echo
 	echo "${FONT_GREEN}Controle:${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_GREEN}R)${FONT_DEFAULT} Rodar o jogo                ${FONT_GREEN}E)${FONT_DEFAULT} Encerrar o jogo";
+	echo "   ${FONT_RED}R)${FONT_DEFAULT} Rodar o jogo                ${FONT_RED}E)${FONT_DEFAULT} Encerrar o jogo         ${FONT_RED}L)${FONT_DEFAULT} Limpar esta tela";
 	echo
 	echo "${FONT_YELLOW}S)${FONT_DEFAULT} Sair";
 	echo
@@ -245,18 +300,23 @@ function showMainMenu() {
 	elif [ "$option" == "3" ] ; then doCleanUpPersonalFolder;
 	elif [ "$option" == "4" ] ; then doBackup;
 	elif [ "$option" == "5" ] ; then doBackupRestore;
+	elif [ "$option" == "5" ] ; then doUninstallAllMods;
 
 	elif [ "$option" == "6" ] ; then doInstallMinecraftForge;
-	elif [ "$option" == "7" ] ; then doInstallPixelmon;
+	elif [ "$option" == "7" ] ; then doInstallModLoader;
 
-	elif [ "$option" == "8" ] ; then doInstallSkinChar 1;
-	elif [ "$option" == "9" ] ; then doInstallSkinChar 2;
-	elif [ "$option" == "10" ] ; then doInstallSkinChar 3;
-	elif [ "$option" == "11" ] ; then doInstallSkinChar 4;
-	elif [ "$option" == "12" ] ; then doUninstallSkinChar;
+	elif [ "$option" == "8" ] ; then doInstallPixelmon;
+	elif [ "$option" == "9" ] ; then doInstallReisMinimap;
+
+	elif [ "$option" == "10" ] ; then doInstallSkinChar 1;
+	elif [ "$option" == "11" ] ; then doInstallSkinChar 2;
+	elif [ "$option" == "12" ] ; then doInstallSkinChar 3;
+	elif [ "$option" == "13" ] ; then doInstallSkinChar 4;
+	elif [ "$option" == "14" ] ; then doUninstallSkinChar;
 
 	elif [ "$option" == "R" -o "$option" == "r" ] ; then doStartGame;
 	elif [ "$option" == "E" -o "$option" == "e" ] ; then doQuitGame;
+	elif [ "$option" == "L" -o "$option" == "l" ] ; then doClearScreen;
 
 	elif [ "$option" == "S" -o "$option" == "s" ] ; then doQuit;
 
