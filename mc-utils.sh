@@ -8,12 +8,14 @@ FONT_GREEN="\033[32m"
 FONT_YELLOW="\033[33m"
 FONT_BLUE="\033[34m"
 
-if [ "$1" == "debug" ]; then
+if [ "$1" == "debug-mode" ]; then
 	CLEAR_SCREEN=0
 	AUTO_CLEAN_UP=0
-else
+	USER_MODE=0
+elif [ "$1" == "user-mode" ]; then
 	CLEAR_SCREEN=1
 	AUTO_CLEAN_UP=1
+	USER_MODE=1
 fi
 
 SYSTEM_APPLICATIONS_FOLDER="/Applications"
@@ -80,6 +82,9 @@ function doQuit() {
 		echo $msg;
 	fi
 	echo
+	if [ "$USER_MODE" == 1 ] ; then
+		osascript -e 'tell application "Terminal" to quit'
+	fi
 	exit 0;
 }
 
