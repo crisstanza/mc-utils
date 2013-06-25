@@ -63,6 +63,7 @@ SKIN_CHAR_MARIO_FOLDER="$SKINS_FOLDER/Char/mario"
 SKIN_CHAR_RAPHAEL_FOLDER="$SKINS_FOLDER/Char/raphael"
 SKIN_CHAR_ZOMBIE_FOLDER="$SKINS_FOLDER/Char/zombie"
 SKIN_CHAR_HEMAN_FOLDER="$SKINS_FOLDER/Char/he-man"
+SKIN_CHAR_SPIDERMAN_FOLDER="$SKINS_FOLDER/Char/spider-man"
 
 function doSetup() {
 	if [ -d "$THINGS_FOLDER" ] ; then
@@ -193,6 +194,7 @@ function doInstallSkinChar() {
 		elif [ "$type" == "2" ] ; then cd "$SKIN_CHAR_RAPHAEL_FOLDER"
 		elif [ "$type" == "3" ] ; then cd "$SKIN_CHAR_ZOMBIE_FOLDER"
 		elif [ "$type" == "4" ] ; then cd "$SKIN_CHAR_HEMAN_FOLDER"
+		elif [ "$type" == "5" ] ; then cd "$SKIN_CHAR_SPIDERMAN_FOLDER"
 		else
 			showMainMenu "${FONT_RED}Opção inválida.${FONT_DEFAULT}"
 			return
@@ -222,6 +224,12 @@ function doInstall() {
 			cp -R "$MINECRAFT_INSTALLER_FOLDER/$MINECRAFT_INSTALLER_FILE" "$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE"
 			defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$SYSTEM_APPLICATIONS_FOLDER/$MINECRAFT_INSTALLER_FILE/</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>";
 			killall -HUP Dock
+			if [ -f "$MAIN_FILE_ORIG_FOLDER/$MAIN_FILE" ] ; then
+				if [ ! -d "$MAIN_FILE_FOLDER" ] ; then
+					mkdir -p "$MAIN_FILE_FOLDER"
+				fi
+				cp "$MAIN_FILE_ORIG_FOLDER/$MAIN_FILE" "$MAIN_FILE_FOLDER"
+			fi
 			showMainMenu "${FONT_BLUE}Instalação concluída com sucesso!${FONT_DEFAULT}"
 		fi
 	else
@@ -290,25 +298,25 @@ function showMainMenu() {
 	echo
 	echo "${FONT_YELLOW}O que você deseja?${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_GREEN}1)${FONT_DEFAULT} Instalar Minecraft          ${FONT_GREEN}2)${FONT_DEFAULT} Desinstalar Minecraft   ${FONT_GREEN}3)${FONT_DEFAULT} Apagar pasta pessoal";
-	echo "   ${FONT_GREEN}4)${FONT_DEFAULT} Fazer back-up               ${FONT_GREEN}5)${FONT_DEFAULT} Restaurar back-up       ${FONT_GREEN}6)${FONT_DEFAULT} Desinstalar todas as alterações";
+	echo "   ${FONT_GREEN}1)${FONT_DEFAULT} Instalar Minecraft         ${FONT_GREEN}2)${FONT_DEFAULT} Desinstalar Minecraft    ${FONT_GREEN}3)${FONT_DEFAULT} Apagar pasta pessoal";
+	echo "   ${FONT_GREEN}4)${FONT_DEFAULT} Fazer back-up              ${FONT_GREEN}5)${FONT_DEFAULT} Restaurar back-up        ${FONT_GREEN}6)${FONT_DEFAULT} Desinstalar todas as alterações";
 	echo
 	echo "${FONT_GREEN}Mod Loaders:${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_GREEN}7)${FONT_DEFAULT} Instalar Minecraft Forge    ${FONT_GREEN}8)${FONT_DEFAULT} Instalar ModLoader";
+	echo "   ${FONT_GREEN}7)${FONT_DEFAULT} Instalar Minecraft Forge   ${FONT_GREEN}8)${FONT_DEFAULT} Instalar ModLoader";
 	echo
 	echo "${FONT_GREEN}Mods:${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_GREEN}9)${FONT_DEFAULT} Instalar Pixelmon          ${FONT_GREEN}10)${FONT_DEFAULT} Instalar Rei's Minimap";
+	echo "   ${FONT_GREEN}9)${FONT_DEFAULT} Instalar Pixelmon         ${FONT_GREEN}10)${FONT_DEFAULT} Instalar Rei's Minimap";
 	echo
 	echo "${FONT_GREEN}Skins - Personagem:${FONT_DEFAULT}"
 	echo
-	echo "  ${FONT_GREEN}11)${FONT_DEFAULT} Instalar Mário             ${FONT_GREEN}12)${FONT_DEFAULT} Instalar Raphael";
-	echo "  ${FONT_GREEN}13)${FONT_DEFAULT} Instalar Zumbi             ${FONT_GREEN}14)${FONT_DEFAULT} Instalar He-Man        ${FONT_GREEN}15)${FONT_DEFAULT} Original";
+	echo "  ${FONT_GREEN}11)${FONT_DEFAULT} Instalar Mário            ${FONT_GREEN}12)${FONT_DEFAULT} Instalar Rafael         ${FONT_GREEN}13)${FONT_DEFAULT} Instalar Zumbi";
+	echo "  ${FONT_GREEN}14)${FONT_DEFAULT} Instalar He-Man           ${FONT_GREEN}15)${FONT_DEFAULT} Instalar Homem-Aranha   ${FONT_GREEN}16)${FONT_DEFAULT} Original";
 	echo
 	echo "${FONT_GREEN}Controle:${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_RED}R)${FONT_DEFAULT} Rodar o jogo                ${FONT_RED}E)${FONT_DEFAULT} Encerrar o jogo         ${FONT_RED}L)${FONT_DEFAULT} Limpar esta tela";
+	echo "   ${FONT_RED}R)${FONT_DEFAULT} Rodar o jogo               ${FONT_RED}E)${FONT_DEFAULT} Encerrar o jogo         ${FONT_RED}L)${FONT_DEFAULT} Limpar esta tela";
 	echo
 	echo "${FONT_YELLOW}S)${FONT_DEFAULT} Sair";
 	echo
@@ -333,7 +341,8 @@ function showMainMenu() {
 	elif [ "$option" == "12" ] ; then doInstallSkinChar 2;
 	elif [ "$option" == "13" ] ; then doInstallSkinChar 3;
 	elif [ "$option" == "14" ] ; then doInstallSkinChar 4;
-	elif [ "$option" == "15" ] ; then doUninstallSkinChar;
+	elif [ "$option" == "15" ] ; then doInstallSkinChar 5;
+	elif [ "$option" == "16" ] ; then doUninstallSkinChar;
 
 	elif [ "$option" == "R" -o "$option" == "r" ] ; then doStartGame;
 	elif [ "$option" == "E" -o "$option" == "e" ] ; then doQuitGame;
