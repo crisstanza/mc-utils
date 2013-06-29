@@ -65,6 +65,14 @@ SKIN_CHAR_ZOMBIE_FOLDER="$SKINS_FOLDER/Char/zombie"
 SKIN_CHAR_HEMAN_FOLDER="$SKINS_FOLDER/Char/he-man"
 SKIN_CHAR_SPIDERMAN_FOLDER="$SKINS_FOLDER/Char/spider-man"
 
+PIXELMON_INSTALLER_FOLDER="$THINGS_FOLDER/Pixelmon"
+PIXELMON_INSTALLER_FILE_NAME="Pixelmon-2.2.1-Install"
+PIXELMON_INSTALLER_FILE="$PIXELMON_INSTALLER_FILE_NAME.zip"
+
+ANT_FARM_SURVIVAL_INSTALLER_FOLDER="$THINGS_FOLDER/Maps"
+ANT_FARM_SURVIVAL_INSTALLER_FILE_NAME="AntFarmSurvival_v3.0.1"
+ANT_FARM_SURVIVAL_INSTALLER_FILE="$ANT_FARM_SURVIVAL_INSTALLER_FILE_NAME.zip"
+
 function doSetup() {
 	if [ -d "$THINGS_FOLDER" ] ; then
 		if [ -d "$TMP_FOLDER" ] ; then
@@ -181,6 +189,16 @@ function doInstallPixelmon() {
 	else
 		showMainMenu "${FONT_RED}Arquivo '$MAIN_FILE_FOLDER/$MAIN_FILE' não encontrado!${FONT_DEFAULT}"
 	fi
+}
+
+function doInstallAntFarmSurvival() {
+	unzip -x "$ANT_FARM_SURVIVAL_INSTALLER_FOLDER/$ANT_FARM_SURVIVAL_INSTALLER_FILE" -d "$TMP_FOLDER/$ANT_FARM_SURVIVAL_INSTALLER_FILE_NAME.unzip"
+	cd "$TMP_FOLDER/$ANT_FARM_SURVIVAL_INSTALLER_FILE_NAME.unzip"
+	cp -Rf saves/* "$MAIN_FILE_FOLDER_ROOT/saves"
+	if [ "$AUTO_CLEAN_UP" == 1 ] ; then
+		rm -R "$TMP_FOLDER/$ANT_FARM_SURVIVAL_INSTALLER_FILE_NAME.unzip"
+	fi
+	showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
 }
 
 function doInstallReisMinimap() {
@@ -314,6 +332,10 @@ function showMainMenu() {
 	echo "  ${FONT_GREEN}11)${FONT_DEFAULT} Instalar Mário            ${FONT_GREEN}12)${FONT_DEFAULT} Instalar Rafael         ${FONT_GREEN}13)${FONT_DEFAULT} Instalar Zumbi";
 	echo "  ${FONT_GREEN}14)${FONT_DEFAULT} Instalar He-Man           ${FONT_GREEN}15)${FONT_DEFAULT} Instalar Homem-Aranha   ${FONT_GREEN}16)${FONT_DEFAULT} Original";
 	echo
+	echo "${FONT_GREEN}Mapas:${FONT_DEFAULT}"
+	echo
+	echo "  ${FONT_GREEN}17)${FONT_DEFAULT} Instalar Ant Farm Survival";
+	echo
 	echo "${FONT_GREEN}Controle:${FONT_DEFAULT}"
 	echo
 	echo "   ${FONT_RED}R)${FONT_DEFAULT} Rodar o jogo               ${FONT_RED}E)${FONT_DEFAULT} Encerrar o jogo         ${FONT_RED}L)${FONT_DEFAULT} Limpar esta tela";
@@ -343,6 +365,7 @@ function showMainMenu() {
 	elif [ "$option" == "14" ] ; then doInstallSkinChar 4;
 	elif [ "$option" == "15" ] ; then doInstallSkinChar 5;
 	elif [ "$option" == "16" ] ; then doUninstallSkinChar;
+	elif [ "$option" == "17" ] ; then doInstallAntFarmSurvival;
 
 	elif [ "$option" == "R" -o "$option" == "r" ] ; then doStartGame;
 	elif [ "$option" == "E" -o "$option" == "e" ] ; then doQuitGame;
