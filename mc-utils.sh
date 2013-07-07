@@ -47,10 +47,6 @@ MODLOADER_INSTALLER_FOLDER="$THINGS_FOLDER/ModLoader"
 MODLOADER_INSTALLER_FILE_NAME="ModLoader-1.5.2"
 MODLOADER_INSTALLER_FILE="$MODLOADER_INSTALLER_FILE_NAME.zip"
 
-PIXELMON_INSTALLER_FOLDER="$THINGS_FOLDER/Pixelmon"
-PIXELMON_INSTALLER_FILE_NAME="Pixelmon-2.2.1-Install"
-PIXELMON_INSTALLER_FILE="$PIXELMON_INSTALLER_FILE_NAME.zip"
-
 REIS_MINIMAP_INSTALLER_FOLDER="$THINGS_FOLDER/Reis-Minimap"
 REIS_MINIMAP_INSTALLER_FILE_NAME="Reis-Minimap-Mod-1.5.2"
 REIS_MINIMAP_INSTALLER_FILE="$REIS_MINIMAP_INSTALLER_FILE_NAME.zip"
@@ -72,6 +68,10 @@ PIXELMON_INSTALLER_FILE="$PIXELMON_INSTALLER_FILE_NAME.zip"
 ANT_FARM_SURVIVAL_INSTALLER_FOLDER="$THINGS_FOLDER/Maps"
 ANT_FARM_SURVIVAL_INSTALLER_FILE_NAME="AntFarmSurvival_v3.0.1"
 ANT_FARM_SURVIVAL_INSTALLER_FILE="$ANT_FARM_SURVIVAL_INSTALLER_FILE_NAME.zip"
+
+FLANS_MOD_INSTALLER_FOLDER="$THINGS_FOLDER/Flans-Mod"
+FLANS_MOD_INSTALLER_FILE_NAME="Flans Mod 2.3.2 for Minecraft 1.5.2 Universal"
+FLANS_MOD_INSTALLER_FILE="$FLANS_MOD_INSTALLER_FILE_NAME.zip"
 
 function doSetup() {
 	if [ -d "$THINGS_FOLDER" ] ; then
@@ -201,6 +201,11 @@ function doInstallAntFarmSurvival() {
 	showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
 }
 
+function doInstallFlansMod() {
+	cp -R "$FLANS_MOD_INSTALLER_FOLDER/$FLANS_MOD_INSTALLER_FILE" "$MAIN_FILE_FOLDER_ROOT/mods"
+	showMainMenu "${FONT_BLUE}Instalação concluída com sucesso! Reinicíe o jogo.${FONT_DEFAULT}"
+}
+
 function doInstallReisMinimap() {
 	doInstallZipIntoJar $REIS_MINIMAP_INSTALLER_FOLDER $REIS_MINIMAP_INSTALLER_FILE_NAME $REIS_MINIMAP_INSTALLER_FILE
 }
@@ -316,8 +321,8 @@ function showMainMenu() {
 	echo
 	echo "${FONT_YELLOW}O que você deseja?${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_GREEN}1)${FONT_DEFAULT} Instalar Minecraft         ${FONT_GREEN}2)${FONT_DEFAULT} Desinstalar Minecraft    ${FONT_GREEN}3)${FONT_DEFAULT} Apagar pasta pessoal";
-	echo "   ${FONT_GREEN}4)${FONT_DEFAULT} Fazer back-up              ${FONT_GREEN}5)${FONT_DEFAULT} Restaurar back-up        ${FONT_GREEN}6)${FONT_DEFAULT} Desinstalar todas as alterações";
+	echo "   ${FONT_GREEN}1)${FONT_DEFAULT} Instalar Minecraft         ${FONT_GREEN}2)${FONT_DEFAULT} Desinstalar Minecraft      ${FONT_GREEN}3)${FONT_DEFAULT} Apagar pasta pessoal";
+	echo "   ${FONT_GREEN}4)${FONT_DEFAULT} Fazer back-up              ${FONT_GREEN}5)${FONT_DEFAULT} Restaurar back-up          ${FONT_GREEN}6)${FONT_DEFAULT} Desinstalar todas as alterações";
 	echo
 	echo "${FONT_GREEN}Mod Loaders:${FONT_DEFAULT}"
 	echo
@@ -325,12 +330,12 @@ function showMainMenu() {
 	echo
 	echo "${FONT_GREEN}Mods:${FONT_DEFAULT}"
 	echo
-	echo "   ${FONT_GREEN}9)${FONT_DEFAULT} Instalar Pixelmon         ${FONT_GREEN}10)${FONT_DEFAULT} Instalar Rei's Minimap";
+	echo "   ${FONT_GREEN}9)${FONT_DEFAULT} Instalar Pixelmon         ${FONT_GREEN}10)${FONT_DEFAULT} Instalar Rei's Minimap    ${FONT_GREEN}18)${FONT_DEFAULT} Instalar Flan's Mod";
 	echo
 	echo "${FONT_GREEN}Skins - Personagem:${FONT_DEFAULT}"
 	echo
-	echo "  ${FONT_GREEN}11)${FONT_DEFAULT} Instalar Mário            ${FONT_GREEN}12)${FONT_DEFAULT} Instalar Rafael         ${FONT_GREEN}13)${FONT_DEFAULT} Instalar Zumbi";
-	echo "  ${FONT_GREEN}14)${FONT_DEFAULT} Instalar He-Man           ${FONT_GREEN}15)${FONT_DEFAULT} Instalar Homem-Aranha   ${FONT_GREEN}16)${FONT_DEFAULT} Original";
+	echo "  ${FONT_GREEN}11)${FONT_DEFAULT} Instalar Mário            ${FONT_GREEN}12)${FONT_DEFAULT} Instalar Rafael           ${FONT_GREEN}13)${FONT_DEFAULT} Instalar Zumbi";
+	echo "  ${FONT_GREEN}14)${FONT_DEFAULT} Instalar He-Man           ${FONT_GREEN}15)${FONT_DEFAULT} Instalar Homem-Aranha     ${FONT_GREEN}16)${FONT_DEFAULT} Original";
 	echo
 	echo "${FONT_GREEN}Mapas:${FONT_DEFAULT}"
 	echo
@@ -358,6 +363,7 @@ function showMainMenu() {
 
 	elif [ "$option" == "9" ] ; then doInstallPixelmon;
 	elif [ "$option" == "10" ] ; then doInstallReisMinimap;
+	elif [ "$option" == "18" ] ; then doInstallFlansMod;
 
 	elif [ "$option" == "11" ] ; then doInstallSkinChar 1;
 	elif [ "$option" == "12" ] ; then doInstallSkinChar 2;
